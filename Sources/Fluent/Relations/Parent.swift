@@ -46,8 +46,8 @@ extension Parent where Child.Database: QuerySupporting {
     /// - parameters:
     ///     - conn: Database connection to use.
     /// - returns: Newly created `QueryBuilder`.
-    public func query(on conn: DatabaseConnectable) -> QueryBuilder<Parent.Database, Parent> {
-        return Parent.query(on: conn)
+    public func query(on conn: DatabaseConnectable, withSoftDeleted: Bool = false) -> QueryBuilder<Parent.Database, Parent> {
+        return Parent.query(on: conn, withSoftDeleted: withSoftDeleted)
             .filter(Parent.idKey == parentID)
     }
 
@@ -61,8 +61,8 @@ extension Parent where Child.Database: QuerySupporting {
     /// - parameters:
     ///     - conn: Database connection to use.
     /// - returns: The `Parent`.
-    public func get(on conn: DatabaseConnectable) -> Future<Parent> {
-        return self.query(on: conn).first().map { first in
+    public func get(on conn: DatabaseConnectable, withSoftDeleted: Bool = false) -> Future<Parent> {
+        return self.query(on: conn, withSoftDeleted: withSoftDeleted).first().map { first in
             guard let parent = first else {
                 throw FluentError(identifier: "parentRequired", reason: "This parent relationship could not be resolved.")
             }

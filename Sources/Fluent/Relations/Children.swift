@@ -51,8 +51,8 @@ public struct Children<Parent, Child>
     /// - parameters:
     ///     - conn: Database connection to use.
     /// - returns: Newly created `QueryBuilder`.
-    public func query(on conn: DatabaseConnectable) throws -> QueryBuilder<Child.Database, Child> {
-        let builder = Child.query(on: conn)
+    public func query(on conn: DatabaseConnectable, withSoftDeleted: Bool = false) throws -> QueryBuilder<Child.Database, Child> {
+        let builder = Child.query(on: conn, withSoftDeleted: withSoftDeleted)
         switch parentID {
         case .optional(let parentID): try builder.filter(parentID == parent.requireID())
         case .required(let parentID): try builder.filter(parentID == parent.requireID())
